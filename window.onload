@@ -1,0 +1,255 @@
+网页中的javaScript脚本代码往往需要在文档加载完成后才能够去执行，否则可能导致无法获取对象的情况，为了避免这种情况的发生，可以使用以下两种方式:
+一.将脚本代码放在网页的底端，这样在运行脚本代码的时候，可以确保要操作的对象已经加载完成。
+二.通过window.onload来执行脚本代码。
+第一种方式感觉比较凌乱（其实推荐使用），往往我们需要将脚本代码放在一个更为合适的地方，那么window.onload方式就是一个良好的选择。window.onload是一个事件，当文档加载完成之后就会触发该事件，可以为此事件注册事件处理函数，并将要执行的脚本代码放在事件处理函数中，于是就可以避免获取不到对象的情况。先看一段代码实例:
+
+[HTML] 纯文本查看 复制代码运行代码
+<!DOCTYPE html>   
+<html>   
+<head>   
+<meta charset=" utf-8">   
+<meta name="author" content="http://www.softwhy.com/" /> 
+<title>window.onload用法-蚂蚁部落</title>
+<style type="text/css">
+#bg{
+  width:100px;
+  height:100px;
+  border:2px solid red;
+}
+</style>
+<script type="text/javascript">
+document.getElementById("bg").style.backgroundColor="#F90";
+</script>
+</head>
+<body>
+  <div id="bg"></div>
+</body>
+</html>
+
+以上代码的初衷是向将div的背景颜色设置为#F90，但是并没有实现此效果，这是因为代码是顺序执行的，当执行到document.getElementById("#bg").style.backgroundColor="#F90"这一句的时候，还没有加载到此div对象，所以设置也就不能够成功。代码修改如下:
+
+[HTML] 纯文本查看 复制代码运行代码
+
+<!DOCTYPE html>   
+<html>   
+<head>   
+<meta charset=" utf-8">   
+<meta name="author" content="http://www.softwhy.com/" /> 
+<title>位置高度div垂直居中-蚂蚁部落</title>
+<style type="text/css">
+#bg{
+  width:100px;
+  height:100px;
+  border:2px solid red;
+}
+</style>
+<script type="text/javascript">
+window.onload=function(){
+  document.getElementById("bg").style.backgroundColor="#F90";
+}
+</script>
+</head>
+<body>
+  <div id="bg"></div>
+</body>
+</html>
+
+以上代码实现了将div背景颜色设置为#F90的目的。原因就是讲设置背景颜色的代码放置在window.onload的事件处理函数中，只有当文档加载完成后，才会执行事件处理函数，也才会执行设置背景颜色的脚本代码。
+事件处理函数绑定:
+方式一:
+window.onload=function(){}，在以上代码中就是使用此种方式为window.onload事件绑定事件处理函数，这里绑定的是一个匿名函数，当然也可以绑定非匿名函数，代码实例如下:
+
+[HTML] 纯文本查看 复制代码运行代码
+
+<!DOCTYPE html>   
+<html>   
+<head>   
+<meta charset=" utf-8">   
+<meta name="author" content="http://www.softwhy.com/" /> 
+<title>window.onload用法详解-蚂蚁部落</title>
+<script type="text/javascript">
+window.onload=function myalert()
+{
+  alert("绑定成功！");
+}
+</script>
+</head>
+<body>
+ 
+</body>
+</html>
+
+以上代码可以将为名myalert方法绑定到window.onload事件上，但是不能以以下方式为此事件绑定多个事件处理函数:
+
+[JavaScript] 纯文本查看 复制代码运行代码
+1
+2
+window.onload=function a(){}
+window.onload=function b(){}
+
+以上代码并不能为window.onload事件绑定多个事件处理函数，而是最后一个会覆盖前面的所有函数。不过代码可以变通一下:
+
+[HTML] 纯文本查看 复制代码运行代码
+<!DOCTYPE html>   
+<html>   
+<head>   
+<meta charset=" utf-8">   
+<meta name="author" content="http://www.softwhy.com/" /> 
+<title>window.onload用法-蚂蚁部落</title>
+<style type="text/css">
+#bg{
+  width:100px;
+  height:100px;
+  border:2px solid red;
+}
+</style>
+<script type="text/javascript">
+window.onload=function(){
+  function a(){
+    document.getElementById("bg").style.backgroundColor="#F90";
+  }
+  function b(){
+    document.getElementById("bg").style.width="200px";
+  }
+  a();
+  b();
+}
+</script>
+</head>
+<body>
+  <div id="bg"></div>
+</body>
+</html>
+
+以上代码实现了绑定多个事件处理函数同样的效果。
+方式二:
+可以使用addEventListener()和attachEvent()为onload事件绑定事件处理函数，下面分别介绍一下：
+addEventListener()是当前标准的一种事件处理函数绑定方式，但是IE8和IE8以下的浏览器并不支持此方式，实例如下:
+
+[HTML] 纯文本查看 复制代码运行代码
+<!DOCTYPE html>   
+<html>   
+<head>   
+<meta charset=" utf-8">   
+<meta name="author" content="http://www.softwhy.com/" /> 
+<title>window.onload用法-蚂蚁部落</title>
+<style type="text/css">
+#bg{
+  width:100px;
+  height:100px;
+  border:2px solid red;
+}
+</style>
+<script type="text/javascript">
+window.addEventListener("load",bg,false);
+window.addEventListener("load",changeW,false);
+function bg(){
+  document.getElementById("bg").style.backgroundColor="#F90";
+}
+function changeW(){
+  document.getElementById("bg").style.width="200px";
+}
+</script>
+</head>
+<body>
+  <div id="bg"></div>
+</body>
+</html>
+
+以上代码可以为window.onload事件绑定多个事件处理函数。简单介绍一下语法格式:
+
+[JavaScript] 纯文本查看 复制代码运行代码
+1
+addEventListener("type",函数名,false)
+
+addEventListener()函数具有三个参数，第一个参数事件类型，需要注意的是，事件类型名称前面不能有on，例如window.onload事件，在这个地方只能写作load，第二个参数是要绑定的函数名称，第三个参数一般为false。
+使用attachEvent()函数绑定事件处理函数:
+IE9之前的的IE浏览器不支持addEventListener()函数，所以attachEvent()函数就有了用武之地了，代码实例如下:
+
+[HTML] 纯文本查看 复制代码运行代码
+<!DOCTYPE html>   
+<html>   
+<head>   
+<meta charset=" utf-8">   
+<meta name="author" content="http://www.softwhy.com/" /> 
+<title>window.onload用法-蚂蚁部落</title>
+<style type="text/css">
+#bg{
+  width:100px;
+  height:100px;
+  border:2px solid red;
+}
+</style>
+<script type="text/javascript">
+window.attachEvent("onload",bg);
+window.attachEvent("onload",changeW);
+function bg(){
+  document.getElementById("bg").style.backgroundColor="#F90";
+}
+function changeW(){
+  document.getElementById("bg").style.width="200px";
+}
+</script>
+</head>
+<body>
+  <div id="bg"></div>
+</body>
+</html>
+
+以上代码的效果和使用addEventListener()函数的效果是一样的，简单介绍一下语法格式:
+
+[JavaScript] 纯文本查看 复制代码运行代码
+1
+addEventListener("type",函数名)
+
+此函数只有两个参数，第一个参数是事件类型，不过它和addEventListener()的第一个参数的作用是一样，但是名称有所区别，名称前面是具有"on"，第二个参数就是要绑定的事件处理函数名称。为了兼容各浏览器，需要将以上代码进行改造，实例如下:
+
+[HTML] 纯文本查看 复制代码运行代码
+<!DOCTYPE html>   
+<html>   
+<head>   
+<meta charset=" utf-8">   
+<meta name="author" content="http://www.softwhy.com/" /> 
+<title>window.onload用法-蚂蚁部落</title>
+<style type="text/css">
+#bg{
+  width:100px;
+  height:100px;
+  border:2px solid red;
+}
+</style>
+<script type="text/javascript">
+if(window.addEventListener){
+  window.addEventListener("load",bg,false);
+  window.addEventListener("load",changeW,false);
+}
+else{
+  window.attachEvent("onload",bg);
+  window.attachEvent("onload",changeW);
+}
+ 
+function bg(){
+  document.getElementById("bg").style.backgroundColor="#F90";
+}
+function changeW(){
+  document.getElementById("bg").style.width="200px";
+}
+</script>
+</head>
+<body>
+  <div id="bg"></div>
+</body>
+</html>
+
+以上代码代码解决了各大浏览器的兼容性问题。在上面代码中使用以下代码进行判断:
+
+[JavaScript] 纯文本查看 复制代码运行代码
+
+if(object.addEventListener){
+  object.addEventListener();
+}
+else{
+  object.attachEvent();
+}
+
+通过if语句判断对象是否具有addEventListener属性，如果有这使用addEventListener()函数，否则使用attachEvent()函数。
