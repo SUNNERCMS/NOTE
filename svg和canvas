@@ -38,9 +38,7 @@
 
 三、前端绘图的建议
 根据前面的描述，我们在前端绘图一般在SVG和canvas之间选择，二者的选择策略如下图所示。
-
 具体参考：
-
 1、如何在 SVG 和 Canvas 之间进行选择（http://msdn.microsoft.com/zh-cn/library/gg193983）
 
 2、突袭HTML5之SVG 2D入门13 - svg对决canvas（http://www.cnblogs.com/dxy1982/archive/2012/07/25/2409234.html）
