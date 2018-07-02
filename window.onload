@@ -244,12 +244,10 @@ function changeW(){
 以上代码代码解决了各大浏览器的兼容性问题。在上面代码中使用以下代码进行判断:
 
 [JavaScript] 纯文本查看 复制代码运行代码
-
 if(object.addEventListener){
   object.addEventListener();
 }
 else{
   object.attachEvent();
 }
-
 通过if语句判断对象是否具有addEventListener属性，如果有这使用addEventListener()函数，否则使用attachEvent()函数。
