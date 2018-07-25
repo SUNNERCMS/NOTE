@@ -1,4 +1,5 @@
 噩梦开始的源头：
+
 	之前写html或者jsp页面，从来不注意doctype的声明，也不太明白doctype的作用。直到最近碰到了一个非常奇葩的bug：某一个页面在IE7和8，Chrome，ff等下正常，但是在IE9下显示有问题，我就开始找啊找，各种调试，各种log，终于在httpWatch里边找到了答案：DOCTYPE未声明。于是我给页面添加了<!DOCTYPE html>,果然奏效了。
  
 下面我就尽可能简洁扼要的说一下DOCTYPE的作用和用法。
